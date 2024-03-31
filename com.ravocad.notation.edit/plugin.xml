@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
+      <!-- @generated notation -->
+      <factory
+            uri="http://www.ravocad.com/runtime/notation"
+            class="com.ravocad.notation.provider.NotationItemProviderAdapterFactory"
+            supportedTypes=
+              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+               org.eclipse.emf.edit.provider.ITreeItemContentProvider
+               org.eclipse.emf.edit.provider.IItemLabelProvider
+               org.eclipse.emf.edit.provider.IItemPropertySource"/>
+   </extension>
+   
+   <extension point="org.eclipse.emf.edit.propertyEditorFactories">
+   <factory
+         class="com.ravocad.notation.provider.ColorPropertyEditorFactory"
+         uri="editor://com.ravocad.color/">
+   </factory>
+</extension>
+
+</plugin>
