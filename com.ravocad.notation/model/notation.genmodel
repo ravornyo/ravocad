@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.ravocad.notation/src" modelPluginID="com.ravocad.notation"
+    modelName="Notation" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="17.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>notation.ecore</foreignModel>
+  <genPackages prefix="Notation" basePackage="com.ravocad" disposableProviderFactory="true"
+      ecorePackage="notation.ecore#/">
+    <genDataTypes ecoreDataType="notation.ecore#//PathData"/>
+    <genDataTypes ecoreDataType="notation.ecore#//PointList"/>
+    <genDataTypes ecoreDataType="notation.ecore#//RGB"/>
+    <genClasses ecoreClass="notation.ecore#//Diagram">
+      <genFeatures property="None" notify="false" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference notation.ecore#//Diagram/view"/>
+      <genFeatures createChild="false" propertyDescription="Show Rulers" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/rulerVisible"/>
+      <genFeatures createChild="false" propertyDescription="Show Grid" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/gridVisible"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/snapToGrid"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/snapToGeometry"/>
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/zoom"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="notation.ecore#//View">
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//View/hint"/>
+    </genClasses>
+    <genClasses ecoreClass="notation.ecore#//Path">
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Path/data"/>
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Path/handles"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Path/lineColor"
+          propertyEditorFactory="editor://com.ravocad.color/TOOL|MAX|RESIZE"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Path/lineWidth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Path/fillColor"
+          propertyEditorFactory="editor://com.ravocad.color/TOOL|MAX|RESIZE"/>
+      <genFeatures createChild="false" propertyDescription="Graphics alpha. Values may range from 0 to 255. A value of 0 is completely transparent."
+          ecoreFeature="ecore:EAttribute notation.ecore#//Path/alpha"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
