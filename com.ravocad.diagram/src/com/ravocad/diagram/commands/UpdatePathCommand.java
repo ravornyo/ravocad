@@ -16,7 +16,7 @@ public class UpdatePathCommand extends org.eclipse.gef.commands.Command {
 	private PathData pathDataCopy;
 
 	public UpdatePathCommand(View view) {
-        super(Messages.getString("MoveHandle_Label"));
+        super(Messages.getString("UpdatePathCommand_Label"));
 		Assert.isNotNull(view, "View adapter cannot be null");
 		this.view = view;	
 	}

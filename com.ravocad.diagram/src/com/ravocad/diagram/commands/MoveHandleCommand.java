@@ -17,7 +17,7 @@ public class MoveHandleCommand extends org.eclipse.gef.commands.Command {
 	private int[] indices;
 
 	public MoveHandleCommand(View view, Point moveDelta, int[] indices) {
-        super(Messages.getString("MoveHandle_Label"));
+        super(Messages.getString("MoveHandleCommand_Label"));
 		Assert.isNotNull(view, "view cannot be null");
 		Assert.isNotNull(moveDelta, "point cannot be null");
 		this.view = view;			
@@ -40,20 +40,38 @@ public class MoveHandleCommand extends org.eclipse.gef.commands.Command {
 		primExecute();
 	}
 	
-	private void primExecute() {
+	protected void primExecute() {
 		PointList points = ((Path)view).getHandles().getCopy();
 		handleCopy = points.getCopy();
-				
+		/*	
 		for(int index: indices) {
 			Point point = points.getPoint(index).getCopy();
 			point.translate(moveDelta);	
 			points.setPoint(point, index);		
 		}
+		*/
+		enforceMoveConstraint(points);
 		view.eSet(NotationPackage.eINSTANCE.getPath_Handles(), points);
+	}
+	
+	protected void enforceMoveConstraint(PointList points) {
+		for(int index: indices) {
+			Point point = points.getPoint(index).getCopy();
+			point.translate(moveDelta);	
+			points.setPoint(point, index);		
+		}
 	}
 
 	@Override
 	public void undo() {
 		view.eSet(NotationPackage.eINSTANCE.getPath_Handles(), handleCopy);
+	}
+	
+	protected int[] getIndices() {
+		return indices;
+	}
+	
+	protected Point getMoveDelta() {
+		return moveDelta;
 	}
 }
