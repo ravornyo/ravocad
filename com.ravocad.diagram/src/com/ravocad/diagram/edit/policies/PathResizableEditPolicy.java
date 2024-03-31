@@ -93,7 +93,7 @@ public class PathResizableEditPolicy extends ResizableEditPolicy {
  
         request.setMoveDelta(moveDelta);
 
-		CompoundCommand cc = new CompoundCommand(Messages.getString("AddCommand_Label"));	
+		CompoundCommand cc = new CompoundCommand(Messages.getString("ChangeBoundsCommand_Label"));	
 		cc.add(new MoveHandleCommand(view, request.getMoveDelta(), request.getIndices()));	
 		cc.add(new UpdatePathCommand(view));
 		
@@ -151,21 +151,25 @@ public class PathResizableEditPolicy extends ResizableEditPolicy {
         }
     }
 	
-	private Path getFeedbackPath(MoveHandleRequest request) {
+	protected Path getFeedbackPath(MoveHandleRequest request) {
         PointList feedbackPoints = getPathShape().getHandlePoints().getCopy();
         getHostFigure().translateToAbsolute(feedbackPoints);
-        
-        for(int index: request.getIndices()) {
-			Point feedbackPoint = feedbackPoints.getPoint(index);
-			feedbackPoint.performTranslate(request.getMoveDelta());
-			feedbackPoints.setPoint(feedbackPoint, index);
-        }
+
+        enforceMoveConstraint(request, feedbackPoints);
         
         getDragSourceFeedbackFigure().translateToRelative(feedbackPoints);
         
         View view = (View)getHost().getModel();
         Path path = GeometryProvider.getInstance().createPath(view.getHint(), feedbackPoints);
 		return path;
+	}
+	
+	protected void enforceMoveConstraint(MoveHandleRequest request, PointList points) {
+		for(int index: request.getIndices()) {
+			Point point = points.getPoint(index);
+			point.performTranslate(request.getMoveDelta());
+			points.setPoint(point, index);
+        }
 	}
 
 	@Override
