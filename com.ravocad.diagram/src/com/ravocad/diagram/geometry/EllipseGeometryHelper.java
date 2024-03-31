@@ -24,12 +24,16 @@ public class EllipseGeometryHelper implements IGeometryHelper {
 
 	protected Rectangle getBounds(PointList controlPoints) {
 		if(controlPoints != null && controlPoints.size() > 1) {
-			return calcEllipsePoints(controlPoints).getBounds();
+			if(controlPoints.size() > 2) {
+				return controlPoints.getBounds();
+			} else {
+				return getTemplatePoints(controlPoints).getBounds();
+			}
 		}
 		return controlPoints.getBounds();
 	}
 	
-	private PointList calcEllipsePoints(PointList points) {
+	public PointList getTemplatePoints(PointList points) {
 		Point center = points.getPoint(0);
 		Point target = points.getPoint(1);
 		
