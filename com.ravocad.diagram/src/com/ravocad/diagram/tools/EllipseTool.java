@@ -2,6 +2,7 @@ package com.ravocad.diagram.tools;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 
 import com.ravocad.diagram.constants.VisualConstants;
 import com.ravocad.diagram.geometry.EllipseGeometryHelper;
@@ -11,6 +12,10 @@ public class EllipseTool extends SketchTool {
 	
 	public EllipseTool() {
 		super(VisualConstants.ELLIPSE);
+	}
+	
+	protected PointList getHandles(PointList points) {
+		return ((EllipseGeometryHelper)createGeometry()).getTemplatePoints(points);
 	}
 	
 	@Override
