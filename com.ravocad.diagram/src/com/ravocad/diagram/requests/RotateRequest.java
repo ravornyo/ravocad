@@ -1,11 +1,9 @@
 package com.ravocad.diagram.requests;
 
-import org.eclipse.gef.requests.GroupRequest;
-
 import com.ravocad.diagram.constants.RequestConstants;
 
-public class RotateRequest extends GroupRequest {
-	
+public class RotateRequest extends OrientationRequest {
+
 	private double angle;
 
 	public RotateRequest() {
