@@ -1,5 +1,10 @@
  package com.ravocad.diagram.tools;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Cursors;
@@ -21,7 +26,12 @@ import org.eclipse.gef.tools.AbstractTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Path;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.console.IOConsoleInputStream;
+import org.eclipse.ui.console.IOConsoleOutputStream;
 
+import com.ravocad.diagram.console.ConsoleFactory;
 import com.ravocad.diagram.geometry.IGeometryHelper;
 
 public abstract class SketchTool extends CreationTool {
@@ -240,7 +250,9 @@ public abstract class SketchTool extends CreationTool {
 	protected boolean handleKeyUp(KeyEvent e) {
 		if (e.keyCode == SWT.Selection) {
 			setUnloadWhenFinished(true);
-			doFinish(1);
+			if(waypoints.size() > 1) {
+				doFinish(1);
+			}
 			return true;
 		}
 		return false;
@@ -332,6 +344,54 @@ public abstract class SketchTool extends CreationTool {
 	public void setHint(String hint) {
 		this.hint = hint;
 	}
+	
+	protected void writeToConsole(String msg) {
+		IOConsoleOutputStream printer = ConsoleFactory.getConsole().newOutputStream();
+		try {
+			printer.write(msg + "\n");
+		} catch (IOException e) {
+		}
+	}
+	
+	protected String readFromConsole() {
+		IOConsoleInputStream is = ConsoleFactory.getConsole().getInputStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		try {
+			return br.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	protected String getConsoleInput(String message) {
+		final AtomicReference<String> consoleInput = new AtomicReference<String>();
+		
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				writeToConsole(message);
+				String input = readFromConsole();
+				consoleInput.set(input);
+			}
+		};
+		new Thread(runnable).start();
+		
+		Shell loopShell = Display.getCurrent().getActiveShell();
+		Display display = loopShell.getDisplay();
+		while (loopShell != null && !loopShell.isDisposed() && consoleInput.get() == null) {
+			try {
+				if (!display.readAndDispatch()) {
+					display.sleep();
+				}
+				
+			} catch (Throwable e) {}
+		}
+		if (!display.isDisposed()) display.update();
+		
+		return consoleInput.get();
+	}
+
 
 	public static class SketchFeedback extends Shape {		
 		private PointList points;

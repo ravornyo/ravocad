@@ -10,7 +10,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 
 import com.ravocad.diagram.constants.VisualConstants;
-import com.ravocad.diagram.dialogs.InputPopupDialog;
+import com.ravocad.diagram.dialogs.ToolInputDialog;
 import com.ravocad.diagram.geometry.IGeometryHelper;
 import com.ravocad.diagram.geometry.PolygonGeometryHelper;
 import com.ravocad.diagram.i10n.Messages;
@@ -35,11 +35,19 @@ public class PolygonTool extends SketchTool {
 		}
 		super.activate();
 	}
-	
+/*	
 	private int getNumSides() {
-		InputPopupDialog dialog = new InputPopupDialog(
+		String input = getConsoleInput(Messages.getString("PolygonCreationDialogMessage"));
+		if(input != null) {
+			return Integer.parseInt(input);
+		}
+		return 5;
+	}
+*/	
+
+	private int getNumSides() {
+		ToolInputDialog dialog = new ToolInputDialog(
 				Display.getCurrent().getActiveShell(),
-				Messages.getString("PolygonCreationDialogTitle"),
 				Messages.getString("PolygonCreationDialogMessage"),
 				Messages.getString("PolygonCreationDialogInitialValue"),
 				new IntegerValidator(3)
