@@ -3,6 +3,8 @@
 package com.ravocad.notation.impl;
 
 import com.ravocad.notation.Diagram;
+import com.ravocad.notation.GridUnit;
+import com.ravocad.notation.NotationFactory;
 import com.ravocad.notation.NotationPackage;
 import com.ravocad.notation.View;
 
@@ -21,6 +23,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.swt.graphics.RGB;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,8 +34,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link com.ravocad.notation.impl.DiagramImpl#getView <em>View</em>}</li>
- *   <li>{@link com.ravocad.notation.impl.DiagramImpl#isRulerVisible <em>Ruler Visible</em>}</li>
  *   <li>{@link com.ravocad.notation.impl.DiagramImpl#isGridVisible <em>Grid Visible</em>}</li>
+ *   <li>{@link com.ravocad.notation.impl.DiagramImpl#getGridColor <em>Grid Color</em>}</li>
+ *   <li>{@link com.ravocad.notation.impl.DiagramImpl#getGridSpacing <em>Grid Spacing</em>}</li>
+ *   <li>{@link com.ravocad.notation.impl.DiagramImpl#getGridUnit <em>Grid Unit</em>}</li>
  *   <li>{@link com.ravocad.notation.impl.DiagramImpl#isSnapToGrid <em>Snap To Grid</em>}</li>
  *   <li>{@link com.ravocad.notation.impl.DiagramImpl#isSnapToGeometry <em>Snap To Geometry</em>}</li>
  *   <li>{@link com.ravocad.notation.impl.DiagramImpl#getZoom <em>Zoom</em>}</li>
@@ -50,26 +55,6 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @ordered
 	 */
 	protected EList<View> view;
-
-	/**
-	 * The default value of the '{@link #isRulerVisible() <em>Ruler Visible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isRulerVisible()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean RULER_VISIBLE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isRulerVisible() <em>Ruler Visible</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isRulerVisible()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean rulerVisible = RULER_VISIBLE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isGridVisible() <em>Grid Visible</em>}' attribute.
@@ -90,6 +75,66 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @ordered
 	 */
 	protected boolean gridVisible = GRID_VISIBLE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getGridColor() <em>Grid Color</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGridColor()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final RGB GRID_COLOR_EDEFAULT = (RGB)NotationFactory.eINSTANCE.createFromString(NotationPackage.eINSTANCE.getRGB(), "211,211,211");
+
+	/**
+	 * The cached value of the '{@link #getGridColor() <em>Grid Color</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGridColor()
+	 * @generated
+	 * @ordered
+	 */
+	protected RGB gridColor = GRID_COLOR_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getGridSpacing() <em>Grid Spacing</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGridSpacing()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double GRID_SPACING_EDEFAULT = 10.0;
+
+	/**
+	 * The cached value of the '{@link #getGridSpacing() <em>Grid Spacing</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGridSpacing()
+	 * @generated
+	 * @ordered
+	 */
+	protected double gridSpacing = GRID_SPACING_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getGridUnit() <em>Grid Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGridUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final GridUnit GRID_UNIT_EDEFAULT = GridUnit.UNIT_PIXELS;
+
+	/**
+	 * The cached value of the '{@link #getGridUnit() <em>Grid Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGridUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected GridUnit gridUnit = GRID_UNIT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isSnapToGrid() <em>Snap To Grid</em>}' attribute.
@@ -139,7 +184,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double ZOOM_EDEFAULT = 0.0;
+	protected static final double ZOOM_EDEFAULT = 1.0;
 
 	/**
 	 * The cached value of the '{@link #getZoom() <em>Zoom</em>}' attribute.
@@ -212,29 +257,6 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @generated
 	 */
 	@Override
-	public boolean isRulerVisible() {
-		return rulerVisible;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRulerVisible(boolean newRulerVisible) {
-		boolean oldRulerVisible = rulerVisible;
-		rulerVisible = newRulerVisible;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, NotationPackage.DIAGRAM__RULER_VISIBLE, oldRulerVisible, rulerVisible));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public boolean isGridVisible() {
 		return gridVisible;
 	}
@@ -250,6 +272,75 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 		gridVisible = newGridVisible;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, NotationPackage.DIAGRAM__GRID_VISIBLE, oldGridVisible, gridVisible));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public RGB getGridColor() {
+		return gridColor;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setGridColor(RGB newGridColor) {
+		RGB oldGridColor = gridColor;
+		gridColor = newGridColor;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, NotationPackage.DIAGRAM__GRID_COLOR, oldGridColor, gridColor));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getGridSpacing() {
+		return gridSpacing;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setGridSpacing(double newGridSpacing) {
+		double oldGridSpacing = gridSpacing;
+		gridSpacing = newGridSpacing;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, NotationPackage.DIAGRAM__GRID_SPACING, oldGridSpacing, gridSpacing));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public GridUnit getGridUnit() {
+		return gridUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setGridUnit(GridUnit newGridUnit) {
+		GridUnit oldGridUnit = gridUnit;
+		gridUnit = newGridUnit == null ? GRID_UNIT_EDEFAULT : newGridUnit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, NotationPackage.DIAGRAM__GRID_UNIT, oldGridUnit, gridUnit));
 	}
 
 	/**
@@ -322,10 +413,14 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 		switch (featureID) {
 			case NotationPackage.DIAGRAM__VIEW:
 				return getView();
-			case NotationPackage.DIAGRAM__RULER_VISIBLE:
-				return isRulerVisible();
 			case NotationPackage.DIAGRAM__GRID_VISIBLE:
 				return isGridVisible();
+			case NotationPackage.DIAGRAM__GRID_COLOR:
+				return getGridColor();
+			case NotationPackage.DIAGRAM__GRID_SPACING:
+				return getGridSpacing();
+			case NotationPackage.DIAGRAM__GRID_UNIT:
+				return getGridUnit();
 			case NotationPackage.DIAGRAM__SNAP_TO_GRID:
 				return isSnapToGrid();
 			case NotationPackage.DIAGRAM__SNAP_TO_GEOMETRY:
@@ -349,11 +444,17 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 				getView().clear();
 				getView().addAll((Collection<? extends View>)newValue);
 				return;
-			case NotationPackage.DIAGRAM__RULER_VISIBLE:
-				setRulerVisible((Boolean)newValue);
-				return;
 			case NotationPackage.DIAGRAM__GRID_VISIBLE:
 				setGridVisible((Boolean)newValue);
+				return;
+			case NotationPackage.DIAGRAM__GRID_COLOR:
+				setGridColor((RGB)newValue);
+				return;
+			case NotationPackage.DIAGRAM__GRID_SPACING:
+				setGridSpacing((Double)newValue);
+				return;
+			case NotationPackage.DIAGRAM__GRID_UNIT:
+				setGridUnit((GridUnit)newValue);
 				return;
 			case NotationPackage.DIAGRAM__SNAP_TO_GRID:
 				setSnapToGrid((Boolean)newValue);
@@ -379,11 +480,17 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 			case NotationPackage.DIAGRAM__VIEW:
 				getView().clear();
 				return;
-			case NotationPackage.DIAGRAM__RULER_VISIBLE:
-				setRulerVisible(RULER_VISIBLE_EDEFAULT);
-				return;
 			case NotationPackage.DIAGRAM__GRID_VISIBLE:
 				setGridVisible(GRID_VISIBLE_EDEFAULT);
+				return;
+			case NotationPackage.DIAGRAM__GRID_COLOR:
+				setGridColor(GRID_COLOR_EDEFAULT);
+				return;
+			case NotationPackage.DIAGRAM__GRID_SPACING:
+				setGridSpacing(GRID_SPACING_EDEFAULT);
+				return;
+			case NotationPackage.DIAGRAM__GRID_UNIT:
+				setGridUnit(GRID_UNIT_EDEFAULT);
 				return;
 			case NotationPackage.DIAGRAM__SNAP_TO_GRID:
 				setSnapToGrid(SNAP_TO_GRID_EDEFAULT);
@@ -408,10 +515,14 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 		switch (featureID) {
 			case NotationPackage.DIAGRAM__VIEW:
 				return view != null && !view.isEmpty();
-			case NotationPackage.DIAGRAM__RULER_VISIBLE:
-				return rulerVisible != RULER_VISIBLE_EDEFAULT;
 			case NotationPackage.DIAGRAM__GRID_VISIBLE:
 				return gridVisible != GRID_VISIBLE_EDEFAULT;
+			case NotationPackage.DIAGRAM__GRID_COLOR:
+				return GRID_COLOR_EDEFAULT == null ? gridColor != null : !GRID_COLOR_EDEFAULT.equals(gridColor);
+			case NotationPackage.DIAGRAM__GRID_SPACING:
+				return gridSpacing != GRID_SPACING_EDEFAULT;
+			case NotationPackage.DIAGRAM__GRID_UNIT:
+				return gridUnit != GRID_UNIT_EDEFAULT;
 			case NotationPackage.DIAGRAM__SNAP_TO_GRID:
 				return snapToGrid != SNAP_TO_GRID_EDEFAULT;
 			case NotationPackage.DIAGRAM__SNAP_TO_GEOMETRY:
@@ -432,10 +543,14 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (rulerVisible: ");
-		result.append(rulerVisible);
-		result.append(", gridVisible: ");
+		result.append(" (gridVisible: ");
 		result.append(gridVisible);
+		result.append(", gridColor: ");
+		result.append(gridColor);
+		result.append(", gridSpacing: ");
+		result.append(gridSpacing);
+		result.append(", gridUnit: ");
+		result.append(gridUnit);
 		result.append(", snapToGrid: ");
 		result.append(snapToGrid);
 		result.append(", snapToGeometry: ");

@@ -28,6 +28,7 @@ import org.eclipse.swt.graphics.RGB;
  *   <li>{@link com.ravocad.notation.impl.PathImpl#getHandles <em>Handles</em>}</li>
  *   <li>{@link com.ravocad.notation.impl.PathImpl#getLineColor <em>Line Color</em>}</li>
  *   <li>{@link com.ravocad.notation.impl.PathImpl#getLineWidth <em>Line Width</em>}</li>
+ *   <li>{@link com.ravocad.notation.impl.PathImpl#isFill <em>Fill</em>}</li>
  *   <li>{@link com.ravocad.notation.impl.PathImpl#getFillColor <em>Fill Color</em>}</li>
  *   <li>{@link com.ravocad.notation.impl.PathImpl#getAlpha <em>Alpha</em>}</li>
  * </ul>
@@ -114,6 +115,26 @@ public class PathImpl extends ViewImpl implements Path {
 	 * @ordered
 	 */
 	protected int lineWidth = LINE_WIDTH_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isFill() <em>Fill</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isFill()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean FILL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isFill() <em>Fill</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isFill()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fill = FILL_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getFillColor() <em>Fill Color</em>}' attribute.
@@ -318,6 +339,29 @@ public class PathImpl extends ViewImpl implements Path {
 	 * @generated
 	 */
 	@Override
+	public boolean isFill() {
+		return fill;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFill(boolean newFill) {
+		boolean oldFill = fill;
+		fill = newFill;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, NotationPackage.PATH__FILL, oldFill, fill));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case NotationPackage.PATH__DATA:
@@ -328,6 +372,8 @@ public class PathImpl extends ViewImpl implements Path {
 				return getLineColor();
 			case NotationPackage.PATH__LINE_WIDTH:
 				return getLineWidth();
+			case NotationPackage.PATH__FILL:
+				return isFill();
 			case NotationPackage.PATH__FILL_COLOR:
 				return getFillColor();
 			case NotationPackage.PATH__ALPHA:
@@ -355,6 +401,9 @@ public class PathImpl extends ViewImpl implements Path {
 				return;
 			case NotationPackage.PATH__LINE_WIDTH:
 				setLineWidth((Integer)newValue);
+				return;
+			case NotationPackage.PATH__FILL:
+				setFill((Boolean)newValue);
 				return;
 			case NotationPackage.PATH__FILL_COLOR:
 				setFillColor((RGB)newValue);
@@ -386,6 +435,9 @@ public class PathImpl extends ViewImpl implements Path {
 			case NotationPackage.PATH__LINE_WIDTH:
 				setLineWidth(LINE_WIDTH_EDEFAULT);
 				return;
+			case NotationPackage.PATH__FILL:
+				setFill(FILL_EDEFAULT);
+				return;
 			case NotationPackage.PATH__FILL_COLOR:
 				setFillColor(FILL_COLOR_EDEFAULT);
 				return;
@@ -412,6 +464,8 @@ public class PathImpl extends ViewImpl implements Path {
 				return LINE_COLOR_EDEFAULT == null ? lineColor != null : !LINE_COLOR_EDEFAULT.equals(lineColor);
 			case NotationPackage.PATH__LINE_WIDTH:
 				return lineWidth != LINE_WIDTH_EDEFAULT;
+			case NotationPackage.PATH__FILL:
+				return fill != FILL_EDEFAULT;
 			case NotationPackage.PATH__FILL_COLOR:
 				return FILL_COLOR_EDEFAULT == null ? fillColor != null : !FILL_COLOR_EDEFAULT.equals(fillColor);
 			case NotationPackage.PATH__ALPHA:
@@ -438,6 +492,8 @@ public class PathImpl extends ViewImpl implements Path {
 		result.append(lineColor);
 		result.append(", lineWidth: ");
 		result.append(lineWidth);
+		result.append(", fill: ");
+		result.append(fill);
 		result.append(", fillColor: ");
 		result.append(fillColor);
 		result.append(", alpha: ");

@@ -3,20 +3,26 @@
 package com.ravocad.notation.impl;
 
 import com.ravocad.notation.Diagram;
+import com.ravocad.notation.GridUnit;
+import com.ravocad.notation.LineType;
 import com.ravocad.notation.NotationFactory;
 import com.ravocad.notation.NotationPackage;
 import com.ravocad.notation.Path;
+import com.ravocad.notation.Text;
 import com.ravocad.notation.View;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.PathData;
 
 /**
@@ -52,6 +58,27 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass textEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum gridUnitEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum lineTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EDataType pathDataEDataType = null;
 
 	/**
@@ -67,6 +94,20 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	 * @generated
 	 */
 	private EDataType rgbEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType fontDataEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType pointEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -145,7 +186,7 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	 */
 	@Override
 	public EAttribute getDiagram_Zoom() {
-		return (EAttribute)diagramEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)diagramEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -164,7 +205,7 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDiagram_RulerVisible() {
+	public EAttribute getDiagram_GridVisible() {
 		return (EAttribute)diagramEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -174,7 +215,7 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDiagram_GridVisible() {
+	public EAttribute getDiagram_GridColor() {
 		return (EAttribute)diagramEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -184,7 +225,7 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDiagram_SnapToGrid() {
+	public EAttribute getDiagram_GridSpacing() {
 		return (EAttribute)diagramEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -194,8 +235,28 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDiagram_SnapToGeometry() {
+	public EAttribute getDiagram_GridUnit() {
 		return (EAttribute)diagramEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagram_SnapToGrid() {
+		return (EAttribute)diagramEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagram_SnapToGeometry() {
+		return (EAttribute)diagramEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -265,7 +326,7 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	 */
 	@Override
 	public EAttribute getPath_FillColor() {
-		return (EAttribute)pathEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)pathEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -275,7 +336,77 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	 */
 	@Override
 	public EAttribute getPath_Alpha() {
-		return (EAttribute)pathEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)pathEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getText() {
+		return textEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getText_Content() {
+		return (EAttribute)textEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getText_Location() {
+		return (EAttribute)textEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getText_Font() {
+		return (EAttribute)textEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getText_Color() {
+		return (EAttribute)textEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getGridUnit() {
+		return gridUnitEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getLineType() {
+		return lineTypeEEnum;
 	}
 
 	/**
@@ -286,6 +417,16 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	@Override
 	public EAttribute getPath_LineWidth() {
 		return (EAttribute)pathEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPath_Fill() {
+		return (EAttribute)pathEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -324,6 +465,26 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 	 * @generated
 	 */
 	@Override
+	public EDataType getFontData() {
+		return fontDataEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EDataType getPoint() {
+		return pointEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotationFactory getNotationFactory() {
 		return (NotationFactory)getEFactoryInstance();
 	}
@@ -349,8 +510,10 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 		// Create classes and their features
 		diagramEClass = createEClass(DIAGRAM);
 		createEReference(diagramEClass, DIAGRAM__VIEW);
-		createEAttribute(diagramEClass, DIAGRAM__RULER_VISIBLE);
 		createEAttribute(diagramEClass, DIAGRAM__GRID_VISIBLE);
+		createEAttribute(diagramEClass, DIAGRAM__GRID_COLOR);
+		createEAttribute(diagramEClass, DIAGRAM__GRID_SPACING);
+		createEAttribute(diagramEClass, DIAGRAM__GRID_UNIT);
 		createEAttribute(diagramEClass, DIAGRAM__SNAP_TO_GRID);
 		createEAttribute(diagramEClass, DIAGRAM__SNAP_TO_GEOMETRY);
 		createEAttribute(diagramEClass, DIAGRAM__ZOOM);
@@ -363,13 +526,26 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 		createEAttribute(pathEClass, PATH__HANDLES);
 		createEAttribute(pathEClass, PATH__LINE_COLOR);
 		createEAttribute(pathEClass, PATH__LINE_WIDTH);
+		createEAttribute(pathEClass, PATH__FILL);
 		createEAttribute(pathEClass, PATH__FILL_COLOR);
 		createEAttribute(pathEClass, PATH__ALPHA);
+
+		textEClass = createEClass(TEXT);
+		createEAttribute(textEClass, TEXT__CONTENT);
+		createEAttribute(textEClass, TEXT__LOCATION);
+		createEAttribute(textEClass, TEXT__FONT);
+		createEAttribute(textEClass, TEXT__COLOR);
+
+		// Create enums
+		gridUnitEEnum = createEEnum(GRID_UNIT);
+		lineTypeEEnum = createEEnum(LINE_TYPE);
 
 		// Create data types
 		pathDataEDataType = createEDataType(PATH_DATA);
 		pointListEDataType = createEDataType(POINT_LIST);
 		rgbEDataType = createEDataType(RGB);
+		fontDataEDataType = createEDataType(FONT_DATA);
+		pointEDataType = createEDataType(POINT);
 	}
 
 	/**
@@ -401,15 +577,18 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 
 		// Add supertypes to classes
 		pathEClass.getESuperTypes().add(this.getView());
+		textEClass.getESuperTypes().add(this.getView());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(diagramEClass, Diagram.class, "Diagram", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDiagram_View(), this.getView(), null, "view", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDiagram_RulerVisible(), ecorePackage.getEBoolean(), "rulerVisible", null, 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_GridVisible(), ecorePackage.getEBoolean(), "gridVisible", null, 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagram_GridColor(), this.getRGB(), "gridColor", "211,211,211", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagram_GridSpacing(), ecorePackage.getEDouble(), "gridSpacing", "10", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagram_GridUnit(), this.getGridUnit(), "gridUnit", "UNIT_PIXELS", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_SnapToGrid(), ecorePackage.getEBoolean(), "snapToGrid", null, 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_SnapToGeometry(), ecorePackage.getEBoolean(), "snapToGeometry", null, 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDiagram_Zoom(), ecorePackage.getEDouble(), "zoom", null, 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagram_Zoom(), ecorePackage.getEDouble(), "zoom", "1.0", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(viewEClass, View.class, "View", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getView_Hint(), ecorePackage.getEString(), "hint", null, 0, 1, View.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -419,13 +598,30 @@ public class NotationPackageImpl extends EPackageImpl implements NotationPackage
 		initEAttribute(getPath_Handles(), this.getPointList(), "handles", null, 0, 1, Path.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPath_LineColor(), this.getRGB(), "lineColor", "0,0,0", 0, 1, Path.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPath_LineWidth(), ecorePackage.getEInt(), "lineWidth", "1", 0, 1, Path.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPath_Fill(), ecorePackage.getEBoolean(), "fill", null, 0, 1, Path.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPath_FillColor(), this.getRGB(), "fillColor", "", 0, 1, Path.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPath_Alpha(), ecorePackage.getEInt(), "alpha", "255", 0, 1, Path.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(textEClass, Text.class, "Text", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getText_Content(), ecorePackage.getEString(), "content", null, 0, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getText_Location(), this.getPoint(), "location", null, 0, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getText_Font(), this.getFontData(), "font", null, 0, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getText_Color(), this.getRGB(), "color", "0,0,0", 0, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(gridUnitEEnum, GridUnit.class, "GridUnit");
+		addEEnumLiteral(gridUnitEEnum, GridUnit.UNIT_INCHES);
+		addEEnumLiteral(gridUnitEEnum, GridUnit.UNIT_CENTIMETERS);
+		addEEnumLiteral(gridUnitEEnum, GridUnit.UNIT_PIXELS);
+
+		initEEnum(lineTypeEEnum, LineType.class, "LineType");
 
 		// Initialize data types
 		initEDataType(pathDataEDataType, PathData.class, "PathData", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(pointListEDataType, PointList.class, "PointList", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(rgbEDataType, org.eclipse.swt.graphics.RGB.class, "RGB", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(fontDataEDataType, FontData.class, "FontData", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(pointEDataType, Point.class, "Point", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

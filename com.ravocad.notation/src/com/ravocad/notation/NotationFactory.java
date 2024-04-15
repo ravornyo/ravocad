@@ -40,6 +40,15 @@ public interface NotationFactory extends EFactory {
 	Path createPath();
 
 	/**
+	 * Returns a new object of class '<em>Text</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Text</em>'.
+	 * @generated
+	 */
+	Text createText();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

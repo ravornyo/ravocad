@@ -19,6 +19,7 @@ import org.eclipse.swt.graphics.RGB;
  *   <li>{@link com.ravocad.notation.Path#getHandles <em>Handles</em>}</li>
  *   <li>{@link com.ravocad.notation.Path#getLineColor <em>Line Color</em>}</li>
  *   <li>{@link com.ravocad.notation.Path#getLineWidth <em>Line Width</em>}</li>
+ *   <li>{@link com.ravocad.notation.Path#isFill <em>Fill</em>}</li>
  *   <li>{@link com.ravocad.notation.Path#getFillColor <em>Fill Color</em>}</li>
  *   <li>{@link com.ravocad.notation.Path#getAlpha <em>Alpha</em>}</li>
  * </ul>
@@ -163,5 +164,27 @@ public interface Path extends View {
 	 * @generated
 	 */
 	void setLineWidth(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Fill</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fill</em>' attribute.
+	 * @see #setFill(boolean)
+	 * @see com.ravocad.notation.NotationPackage#getPath_Fill()
+	 * @model
+	 * @generated
+	 */
+	boolean isFill();
+
+	/**
+	 * Sets the value of the '{@link com.ravocad.notation.Path#isFill <em>Fill</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fill</em>' attribute.
+	 * @see #isFill()
+	 * @generated
+	 */
+	void setFill(boolean value);
 
 } // Path

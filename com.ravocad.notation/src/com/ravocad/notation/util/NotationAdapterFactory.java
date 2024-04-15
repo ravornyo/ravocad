@@ -80,6 +80,10 @@ public class NotationAdapterFactory extends AdapterFactoryImpl {
 				return createPathAdapter();
 			}
 			@Override
+			public Adapter caseText(Text object) {
+				return createTextAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -138,6 +142,20 @@ public class NotationAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPathAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.ravocad.notation.Text <em>Text</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.ravocad.notation.Text
+	 * @generated
+	 */
+	public Adapter createTextAdapter() {
 		return null;
 	}
 

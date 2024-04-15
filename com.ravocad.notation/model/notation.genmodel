@@ -7,16 +7,28 @@
   <foreignModel>notation.ecore</foreignModel>
   <genPackages prefix="Notation" basePackage="com.ravocad" disposableProviderFactory="true"
       ecorePackage="notation.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="notation.ecore#//GridUnit">
+      <genEnumLiterals ecoreEnumLiteral="notation.ecore#//GridUnit/UNIT_INCHES"/>
+      <genEnumLiterals ecoreEnumLiteral="notation.ecore#//GridUnit/UNIT_CENTIMETERS"/>
+      <genEnumLiterals ecoreEnumLiteral="notation.ecore#//GridUnit/UNIT_PIXELS"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="notation.ecore#//LineType"/>
     <genDataTypes ecoreDataType="notation.ecore#//PathData"/>
     <genDataTypes ecoreDataType="notation.ecore#//PointList"/>
     <genDataTypes ecoreDataType="notation.ecore#//RGB"/>
+    <genDataTypes ecoreDataType="notation.ecore#//FontData"/>
+    <genDataTypes ecoreDataType="notation.ecore#//Point"/>
     <genClasses ecoreClass="notation.ecore#//Diagram">
       <genFeatures property="None" notify="false" createChild="false" propertySortChoices="true"
           ecoreFeature="ecore:EReference notation.ecore#//Diagram/view"/>
-      <genFeatures createChild="false" propertyDescription="Show Rulers" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/rulerVisible"/>
-      <genFeatures createChild="false" propertyDescription="Show Grid" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/gridVisible"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/snapToGrid"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/snapToGeometry"/>
+      <genFeatures createChild="false" propertyCategory="Grid" propertyDescription="Show Grid"
+          ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/gridVisible"/>
+      <genFeatures createChild="false" propertyCategory="Grid" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/gridColor"
+          propertyEditorFactory="editor://com.ravocad.color/TOOL|MAX|RESIZE"/>
+      <genFeatures createChild="false" propertyCategory="Grid" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/gridSpacing"/>
+      <genFeatures createChild="false" propertyCategory="Grid" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/gridUnit"/>
+      <genFeatures createChild="false" propertyCategory="Snap Helper" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/snapToGrid"/>
+      <genFeatures createChild="false" propertyCategory="Snap Helper" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/snapToGeometry"/>
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Diagram/zoom"/>
     </genClasses>
     <genClasses image="false" ecoreClass="notation.ecore#//View">
@@ -28,10 +40,19 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Path/lineColor"
           propertyEditorFactory="editor://com.ravocad.color/TOOL|MAX|RESIZE"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Path/lineWidth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Path/fill"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Path/fillColor"
           propertyEditorFactory="editor://com.ravocad.color/TOOL|MAX|RESIZE"/>
       <genFeatures createChild="false" propertyDescription="Graphics alpha. Values may range from 0 to 255. A value of 0 is completely transparent."
           ecoreFeature="ecore:EAttribute notation.ecore#//Path/alpha"/>
+    </genClasses>
+    <genClasses ecoreClass="notation.ecore#//Text">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Text/content"/>
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Text/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Text/font"
+          propertyEditorFactory="editor://com.ravocad.font/TOOL|MAX|RESIZE"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute notation.ecore#//Text/color"
+          propertyEditorFactory="editor://com.ravocad.color/TOOL|MAX|RESIZE"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

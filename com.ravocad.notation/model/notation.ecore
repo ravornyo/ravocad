@@ -4,11 +4,17 @@
   <eClassifiers xsi:type="ecore:EClass" name="Diagram">
     <eStructuralFeatures xsi:type="ecore:EReference" name="view" upperBound="-1" eType="#//View"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rulerVisible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="gridVisible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gridColor" eType="#//RGB"
+        defaultValueLiteral="211,211,211"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gridSpacing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="10"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gridUnit" eType="#//GridUnit"
+        defaultValueLiteral="UNIT_PIXELS"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="snapToGrid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="snapToGeometry" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="zoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="zoom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="1.0"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="View" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -20,12 +26,27 @@
         defaultValueLiteral="0,0,0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fill" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fillColor" eType="#//RGB"
         defaultValueLiteral=""/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="alpha" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="255"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Text" eSuperTypes="#//View">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="#//Point"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="font" eType="#//FontData"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="#//RGB" defaultValueLiteral="0,0,0"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="PathData" instanceClassName="org.eclipse.swt.graphics.PathData"/>
   <eClassifiers xsi:type="ecore:EDataType" name="PointList" instanceClassName="org.eclipse.draw2d.geometry.PointList"/>
   <eClassifiers xsi:type="ecore:EDataType" name="RGB" instanceClassName="org.eclipse.swt.graphics.RGB"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="FontData" instanceClassName="org.eclipse.swt.graphics.FontData"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="GridUnit">
+    <eLiterals name="UNIT_INCHES"/>
+    <eLiterals name="UNIT_CENTIMETERS" value="1"/>
+    <eLiterals name="UNIT_PIXELS" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LineType"/>
 </ecore:EPackage>

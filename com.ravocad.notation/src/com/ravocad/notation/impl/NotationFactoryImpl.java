@@ -2,10 +2,12 @@
  */
 package com.ravocad.notation.impl;
 
+import com.ravocad.notation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -14,6 +16,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.PathData;
 import org.eclipse.swt.graphics.RGB;
 
@@ -68,6 +71,7 @@ public class NotationFactoryImpl extends EFactoryImpl implements NotationFactory
 		switch (eClass.getClassifierID()) {
 			case NotationPackage.DIAGRAM: return createDiagram();
 			case NotationPackage.PATH: return createPath();
+			case NotationPackage.TEXT: return createText();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -81,12 +85,20 @@ public class NotationFactoryImpl extends EFactoryImpl implements NotationFactory
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
+			case NotationPackage.GRID_UNIT:
+				return createGridUnitFromString(eDataType, initialValue);
+			case NotationPackage.LINE_TYPE:
+				return createLineTypeFromString(eDataType, initialValue);
 			case NotationPackage.PATH_DATA:
 				return createPathDataFromString(eDataType, initialValue);
 			case NotationPackage.POINT_LIST:
 				return createPointListFromString(eDataType, initialValue);
 			case NotationPackage.RGB:
 				return createRGBFromString(eDataType, initialValue);
+			case NotationPackage.FONT_DATA:
+				return createFontDataFromString(eDataType, initialValue);
+			case NotationPackage.POINT:
+				return createPointFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -100,12 +112,20 @@ public class NotationFactoryImpl extends EFactoryImpl implements NotationFactory
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
+			case NotationPackage.GRID_UNIT:
+				return convertGridUnitToString(eDataType, instanceValue);
+			case NotationPackage.LINE_TYPE:
+				return convertLineTypeToString(eDataType, instanceValue);
 			case NotationPackage.PATH_DATA:
 				return convertPathDataToString(eDataType, instanceValue);
 			case NotationPackage.POINT_LIST:
 				return convertPointListToString(eDataType, instanceValue);
 			case NotationPackage.RGB:
 				return convertRGBToString(eDataType, instanceValue);
+			case NotationPackage.FONT_DATA:
+				return convertFontDataToString(eDataType, instanceValue);
+			case NotationPackage.POINT:
+				return convertPointToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -131,6 +151,57 @@ public class NotationFactoryImpl extends EFactoryImpl implements NotationFactory
 	public Path createPath() {
 		PathImpl path = new PathImpl();
 		return path;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Text createText() {
+		TextImpl text = new TextImpl();
+		return text;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GridUnit createGridUnitFromString(EDataType eDataType, String initialValue) {
+		GridUnit result = GridUnit.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertGridUnitToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LineType createLineTypeFromString(EDataType eDataType, String initialValue) {
+		LineType result = LineType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertLineTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**
@@ -334,6 +405,68 @@ public class NotationFactoryImpl extends EFactoryImpl implements NotationFactory
 		} else {
 			return "0,0,0";
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public FontData createFontDataFromString(EDataType eDataType, String initialValue) {
+		StringTokenizer st = new StringTokenizer(initialValue, "|");
+		int index = 0;
+		FontData data = new FontData();
+		while (st.hasMoreTokens()) {
+			if(index == 0) {
+				data.setName(st.nextToken().trim());
+			} else if(index == 1) {
+				data.setHeight(Integer.parseInt(st.nextToken().trim()));
+			} else if(index == 2) {
+				data.setStyle(Integer.parseInt(st.nextToken().trim()));
+			}
+			index += 1;
+		}
+		return data;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String convertFontDataToString(EDataType eDataType, Object instanceValue) {
+		FontData data = (FontData)instanceValue;
+		if(data != null) {
+			return data.getName() + "|" + data.getHeight() + "|" + data.getStyle();
+		} else {
+			return "Menlo|14|0";
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public Point createPointFromString(EDataType eDataType, String initialValue) {
+		StringTokenizer st = new StringTokenizer(initialValue, " ");
+		int[] array = new int[st.countTokens()];
+		int index = 0;
+		while (st.hasMoreTokens()) {
+			array[index] = Integer.parseInt(st.nextToken().trim());
+			index += 1;
+		}
+		return new Point(array[0], array[1]);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String convertPointToString(EDataType eDataType, Object instanceValue) {
+		Point point = (Point)instanceValue;
+		return point.x + " " + point.y;
 	}
 
 	/**
