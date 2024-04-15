@@ -6,15 +6,19 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.AccessibleEditPart;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
+import com.ravocad.diagram.edit.policies.ViewComponentPolicy;
 import com.ravocad.notation.View;
 
 public abstract class ViewEditPart extends AbstractGraphicalEditPart implements Adapter {
@@ -32,6 +36,11 @@ public abstract class ViewEditPart extends AbstractGraphicalEditPart implements 
 			super.activate();
 		}
 	}
+	
+	@Override
+	protected void createEditPolicies() {
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ViewComponentPolicy());	
+	}
 
 	protected AccessibleEditPart createAccessible() {
 		return new AccessibleGraphicalEditPart(){
@@ -48,6 +57,10 @@ public abstract class ViewEditPart extends AbstractGraphicalEditPart implements 
 		
 		return super.getAdapter(key);
 	}
+	
+	protected ResourceManager getResourceManager() {
+        return JFaceResources.getResources();
+    } 
 	
 	@Override
 	public void performRequest(Request req) {

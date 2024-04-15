@@ -10,6 +10,7 @@ import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
@@ -25,6 +26,7 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.gef.requests.SelectionRequest;
@@ -32,10 +34,13 @@ import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.tools.DeselectAllTracker;
 import org.eclipse.gef.tools.MarqueeDragTracker;
 import org.eclipse.swt.accessibility.AccessibleEvent;
+import org.eclipse.swt.graphics.Color;
 
 import com.ravocad.diagram.edit.policies.DiagramLayoutEditPolicy;
 import com.ravocad.diagram.i10n.Messages;
+import com.ravocad.diagram.util.DisplayUtil;
 import com.ravocad.notation.Diagram;
+import com.ravocad.notation.GridUnit;
 import com.ravocad.notation.NotationPackage;
 import com.ravocad.notation.View;
 
@@ -54,7 +59,7 @@ public class DiagramEditPart extends AbstractGraphicalEditPart implements Adapte
 	 */
 	public void activate() {
 		if (!isActive()) {
-			hookIntoModel(getDiagramModel());
+			hookIntoModel(getDiagram());
 			super.activate();
 		}
 	}
@@ -127,7 +132,7 @@ public class DiagramEditPart extends AbstractGraphicalEditPart implements Adapte
 	public void deactivate() {
 		if (!isActive())
 			return;
-		unhookFromModel(getDiagramModel());
+		unhookFromModel(getDiagram());
 		super.deactivate();
 	}
 
@@ -136,15 +141,7 @@ public class DiagramEditPart extends AbstractGraphicalEditPart implements Adapte
 			acc = createAccessible();
 		return acc;
 	}
-	
-	/**
-	 * Returns the model of this as a Diagram.
-	 *
-	 * @return Diagram of this.
-	 */
-	protected Diagram getDiagramModel() {
-		return (Diagram) getModel();
-	}
+
 	
 	/**
 	 * Returns the children of this through the model.
@@ -152,7 +149,7 @@ public class DiagramEditPart extends AbstractGraphicalEditPart implements Adapte
 	 * @return Children of this as a List.
 	 */
 	protected List<View> getModelChildren() {
-		return getDiagramModel().getView();
+		return getDiagram().getView();
 	}
 	
 	private void hookIntoModel(EObject model) {
@@ -172,7 +169,19 @@ public class DiagramEditPart extends AbstractGraphicalEditPart implements Adapte
 		Object feature = notification.getFeature();
 		if (NotationPackage.eINSTANCE.getDiagram_View().equals(feature)) {	
 			refreshChildren();
-		} 
+		} else if (NotationPackage.eINSTANCE.getDiagram_GridVisible().equals(feature)) {
+			refreshGridVisibility();			
+		} else if (NotationPackage.eINSTANCE.getDiagram_GridColor().equals(feature)) {
+			refreshGridColor();			
+		} else if (NotationPackage.eINSTANCE.getDiagram_GridSpacing().equals(feature)) {
+			refreshGridSpacing();			
+		} else if (NotationPackage.eINSTANCE.getDiagram_GridUnit().equals(feature)) {
+			refreshGridUnit();			
+		} else if (NotationPackage.eINSTANCE.getDiagram_SnapToGrid().equals(feature)) {
+			refreshGridSnap();			
+		} else if (NotationPackage.eINSTANCE.getDiagram_SnapToGeometry().equals(feature)) {
+			refreshGeometrySnap();			
+		}
 	}
 
 	@Override
@@ -191,7 +200,58 @@ public class DiagramEditPart extends AbstractGraphicalEditPart implements Adapte
 	}
 	
 	protected void refreshVisuals() {
+		refreshGridColor();
+		refreshGridSpacing();
+		
 		Animation.markBegin();
+	}
+	
+	protected Diagram getDiagram() {
+		return (Diagram) getModel();
+	}
+	
+	protected void refreshGridVisibility() {
+		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, getDiagram().isGridVisible());	
+	}
+	
+	protected void refreshGridColor() {
+		if(getDiagram().getGridColor() != null) {
+			GridLayer gridLayer = (GridLayer) getLayer(LayerConstants.GRID_LAYER);
+			gridLayer.setForegroundColor(new Color(getDiagram().getGridColor()));
+		}
+	}
+	
+	protected void refreshGridSpacing() {
+		double gridSpacing = getDiagram().getGridSpacing();
+		int gridUnits = getDiagram().getGridUnit().getValue();
+		// Get the Displays DPIs
+		double dotsPerInch = DisplayUtil.getDisplay().getDPI().x;
+		int spacingInPixels = 0;
+
+		// Evaluate the Grid Spacing based on the ruler units
+		switch(gridUnits) {
+			case GridUnit.UNIT_INCHES_VALUE:
+				spacingInPixels = (int)Math.round(dotsPerInch * gridSpacing);
+				break;
+			case GridUnit.UNIT_CENTIMETERS_VALUE:
+				spacingInPixels = (int)Math.round( dotsPerInch * gridSpacing / 2.54 );
+				break;
+			default:
+				spacingInPixels = (int)gridSpacing;
+		}
+		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(spacingInPixels, spacingInPixels));
+	}
+
+	protected void refreshGridUnit() {
+		refreshGridSpacing();
+	}
+
+	protected void refreshGridSnap() {
+		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, getDiagram().isSnapToGrid());
+	}
+
+	protected void refreshGeometrySnap() {
+		getViewer().setProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED, getDiagram().isSnapToGrid());		
 	}
 
 }

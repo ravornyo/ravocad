@@ -6,6 +6,7 @@ import org.eclipse.gef.EditPartFactory;
 import com.ravocad.diagram.constants.VisualConstants;
 import com.ravocad.notation.Diagram;
 import com.ravocad.notation.Path;
+import com.ravocad.notation.Text;
 
 public class GraphicalEditPartFactory implements EditPartFactory {
 
@@ -15,6 +16,11 @@ public class GraphicalEditPartFactory implements EditPartFactory {
 
 		if (model instanceof Diagram) {
 			child = new DiagramEditPart();
+		} else if (model instanceof Text) {
+			Text text = (Text)model;
+			if(text.getHint().equalsIgnoreCase(VisualConstants.LABEL)) {
+				child = new LabelEditPart();
+			} 
 		} else if (model instanceof Path) {
 			Path path = (Path)model;
 			if(path.getHint().equalsIgnoreCase(VisualConstants.ELLIPSE)) {

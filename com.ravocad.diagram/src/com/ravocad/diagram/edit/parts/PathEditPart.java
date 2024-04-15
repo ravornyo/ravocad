@@ -17,19 +17,24 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import com.ravocad.diagram.edit.figures.PathShape;
-import com.ravocad.diagram.edit.policies.PathComponentPolicy;
+import com.ravocad.diagram.edit.policies.PathMirrorEditPolicy;
 import com.ravocad.diagram.edit.policies.PathResizableEditPolicy;
+import com.ravocad.diagram.edit.policies.PathRotationEditPolicy;
+import com.ravocad.diagram.edit.policies.PathScaleEditPolicy;
 import com.ravocad.notation.NotationPackage;
 import com.ravocad.notation.Path;
 
 
 public class PathEditPart extends ViewEditPart  {
 
-
+	@Override
 	protected void createEditPolicies() {
+		super.createEditPolicies();
 		// allow removal of the associated model element
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new PathComponentPolicy());
 		installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new PathResizableEditPolicy());
+		installEditPolicy("Rotation", new PathRotationEditPolicy());
+		installEditPolicy("Mirror", new PathMirrorEditPolicy());
+		installEditPolicy("Scale", new PathScaleEditPolicy());
 	}
 
 
@@ -55,8 +60,12 @@ public class PathEditPart extends ViewEditPart  {
 		Object feature = notification.getFeature();
 		if (NotationPackage.eINSTANCE.getPath_Data().equals(feature)) {
 			refreshBounds();
+		} else if (NotationPackage.eINSTANCE.getPath_Handles().equals(feature)) {
+			refreshBounds();
 		} else if (NotationPackage.eINSTANCE.getPath_LineWidth().equals(feature)) {
 			refreshLineWidth();			
+		} else if (NotationPackage.eINSTANCE.getPath_Fill().equals(feature)) {
+			refreshFill();			
 		} else if (NotationPackage.eINSTANCE.getPath_LineColor().equals(feature)) {
 			RGB rgb = (RGB) notification.getNewValue();
 			if(rgb != null) {
@@ -83,6 +92,7 @@ public class PathEditPart extends ViewEditPart  {
 		refreshBounds();
 		refreshLineWidth();
 		refreshForegroundColor();
+		refreshFill();
 		refreshBackgroundColor();
 		refreshTransparency();
 	}
@@ -112,6 +122,15 @@ public class PathEditPart extends ViewEditPart  {
 		if (shape != null) {
 			int lineWidth = Math.max(1, view.getLineWidth());
 			shape.setLineWidth(lineWidth);
+		}
+	}
+	
+	protected void refreshFill() {
+		Path view = (Path)getView();
+		
+		PathShape shape = (PathShape)getFigure();
+		if (shape != null) {
+			shape.setFill(view.isFill());
 		}
 	}
 	

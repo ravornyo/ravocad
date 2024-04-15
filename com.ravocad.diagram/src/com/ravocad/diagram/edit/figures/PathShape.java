@@ -26,7 +26,7 @@ public class PathShape extends Shape {
 	@Override
 	public Dimension getPreferredSize(int wHint, int hHint) {
 		if(pathData != null) {
-			float lineInset = Math.max(1.0f, getLineWidthFloat());
+			int lineInset = Math.max(1, getLineWidth());
 			
 			Path path = new Path(PlatformUI.getWorkbench().getDisplay(), pathData);
 			float[] arr = new float[4];
@@ -59,8 +59,17 @@ public class PathShape extends Shape {
 	}
 	
 	@Override
-	protected void fillShape(Graphics graphics) {
-		// TODO Auto-generated method stub	
+	protected void fillShape(Graphics g) {
+		if(pathData != null) {
+			g.pushState();
+			g.setAntialias(SWT.ON);
+			
+			Path path = new Path(PlatformUI.getWorkbench().getDisplay(), pathData);
+			g.fillPath(path);
+			path.dispose();
+			
+			g.popState();
+		}
 	}
 	
 	public void setHandlePoints(PointList handlePoints) {
@@ -73,6 +82,7 @@ public class PathShape extends Shape {
 	}
 	
 	public void setPathData(PathData pathData) {
+		firePropertyChange(PROPERTY_POINTS, null, handlePoints);
 		this.pathData = pathData;
 	}
 	

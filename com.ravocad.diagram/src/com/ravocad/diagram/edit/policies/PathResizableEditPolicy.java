@@ -93,7 +93,7 @@ public class PathResizableEditPolicy extends ResizableEditPolicy {
  
         request.setMoveDelta(moveDelta);
 
-		CompoundCommand cc = new CompoundCommand(Messages.getString("ChangeBoundsCommand_Label"));	
+		CompoundCommand cc = new CompoundCommand(Messages.getString("ChangeBoundsCommand_Label "));	
 		cc.add(new MoveHandleCommand(view, request.getMoveDelta(), request.getIndices()));	
 		cc.add(new UpdatePathCommand(view));
 		
@@ -146,7 +146,7 @@ public class PathResizableEditPolicy extends ResizableEditPolicy {
 			
 			feedback.setPathData(path.getPathData());
 			path.dispose(); 
-			feedback.setBounds(new PrecisionRectangle(arr[0], arr[1], Math.ceil(arr[2]), Math.ceil(arr[3])));
+			feedback.setBounds(new PrecisionRectangle(Math.floor(arr[0]), Math.floor(arr[1]), Math.ceil(arr[2]), Math.ceil(arr[3])).expand(2, 2));
 			feedback.validate();	
         }
     }
@@ -212,8 +212,7 @@ public class PathResizableEditPolicy extends ResizableEditPolicy {
 			}
 		}
 		@Override
-		protected void fillShape(Graphics graphics) {
-			// TODO Auto-generated method stub			
+		protected void fillShape(Graphics graphics) {		
 		}
 		public void setPathData(PathData pathData) {
 			this.pathData = pathData;
