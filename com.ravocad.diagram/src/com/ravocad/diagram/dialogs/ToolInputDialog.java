@@ -6,6 +6,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -13,7 +15,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.SelectionDialog;
 
-public class InputPopupDialog extends SelectionDialog {
+public class ToolInputDialog extends SelectionDialog {
 
 	private IInputValidator validator;
 	private String initialValue;
@@ -23,9 +25,10 @@ public class InputPopupDialog extends SelectionDialog {
 	 */
 	private Text errorMessageText;
 
-	public InputPopupDialog(Shell parentShell, String dialogTitle, String dialogMessage, String initialValue, IInputValidator validator) {
+	public ToolInputDialog(Shell parentShell, String dialogMessage, String initialValue, IInputValidator validator) {
 		super(parentShell);
-		setTitle(dialogTitle);
+		setShellStyle(SWT.ON_TOP | SWT.TOOL | SWT.NO_FOCUS);
+		//setTitle(dialogTitle);
 		if (initialValue == null) {
 			this.initialValue = "";
 		} else {
@@ -39,8 +42,19 @@ public class InputPopupDialog extends SelectionDialog {
 	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		super.createButtonsForButtonBar(parent);
+		//super.createButtonsForButtonBar(parent);
 		text.setFocus();
+	}
+	
+	@Override
+	protected Control createButtonBar(Composite parent) {
+		return null;
+	}
+	
+	@Override
+	protected void configureShell(Shell shell) {
+	  super.configureShell(shell);
+	  shell.addListener(SWT.Deactivate, event -> cancelPressed());
 	}
 	
 	@Override
@@ -58,6 +72,11 @@ public class InputPopupDialog extends SelectionDialog {
 			text.setText(initialValue);
 			text.selectAll();
 		}
+		text.addSelectionListener(new SelectionAdapter() {
+			public void widgetDefaultSelected(SelectionEvent e) {
+				okPressed();
+			}
+		});
 		text.addModifyListener(e -> validateInput());
 		
 		errorMessageText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
@@ -65,6 +84,7 @@ public class InputPopupDialog extends SelectionDialog {
 				| GridData.HORIZONTAL_ALIGN_FILL));
 		errorMessageText.setBackground(errorMessageText.getDisplay()
 				.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		errorMessageText.setForeground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_RED));
 		//setErrorMessage(errorMessage);
 
 		applyDialogFont(composite);
