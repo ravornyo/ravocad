@@ -28,8 +28,8 @@ public class CreateViewCommand extends org.eclipse.gef.commands.Command {
 		parent.getView().add(child);
 	}
 
-	public void setChild(View subpart) {
-		child = subpart;
+	public void setChild(View view) {
+		child = view;
 	}
 
 	public void setParent(Diagram newParent) {

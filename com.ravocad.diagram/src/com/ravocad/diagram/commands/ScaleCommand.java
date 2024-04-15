@@ -11,20 +11,19 @@ import com.ravocad.notation.NotationPackage;
 import com.ravocad.notation.Path;
 import com.ravocad.notation.View;
 
-public class RotateCommand extends Command {
+public class ScaleCommand extends Command {
 
 	private PointList handleCopy;
 	private View view ;
-	private Point origin;
-	private double angle;
+	private double scale;
+	private Point center;
 
-	public RotateCommand(View view, Point origin, double angle){
-		super(Messages.getString("RotateCommand_LabelText"));
+	public ScaleCommand(View view, Point center, double scale){
+		super(Messages.getString("ScaleCommand_LabelText"));
 		Assert.isNotNull(view, "view cannot be null");
-		Assert.isNotNull(origin, "Center of rotation cannot be null");
 		this.view = view;
-		this.origin = origin;
-		this.angle = angle;
+		this.center = center;
+		this.scale = scale;
 	}
 
 	@Override
@@ -53,17 +52,11 @@ public class RotateCommand extends Command {
 	protected void enforceConstraint(PointList points) {
 		for(int i=0; i < points.size(); i++) {
 			Point vertex = points.getPoint(i);
-			
-			double translatedToOriginX = vertex.x - origin.x;
-		    double translatedToOriginY = vertex.y - origin.y;
 
-		    double rotatedX = translatedToOriginX * Math.cos(angle) - translatedToOriginY * Math.sin(angle);
-		    double rotatedY = translatedToOriginX * Math.sin(angle) + translatedToOriginY * Math.cos(angle);
+		    double scaledX = scale * ( vertex.x - center.x) + center.x;
+		    double scaledY = scale * ( vertex.y - center.y) + center.y;
 
-		    double reverseTranslatedX = rotatedX + origin.x;
-		    double reverseTranslatedY = rotatedY + origin.y;
-		    
-			points.setPoint(new PrecisionPoint(reverseTranslatedX, reverseTranslatedY), i);
+			points.setPoint(new PrecisionPoint(scaledX, scaledY), i);
         }
 	}
 

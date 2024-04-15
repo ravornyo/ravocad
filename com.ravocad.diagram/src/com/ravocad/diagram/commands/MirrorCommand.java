@@ -11,20 +11,20 @@ import com.ravocad.notation.NotationPackage;
 import com.ravocad.notation.Path;
 import com.ravocad.notation.View;
 
-public class RotateCommand extends Command {
+public class MirrorCommand extends Command {
 
 	private PointList handleCopy;
 	private View view ;
-	private Point origin;
-	private double angle;
+	private double m;
+	private double c;
 
-	public RotateCommand(View view, Point origin, double angle){
-		super(Messages.getString("RotateCommand_LabelText"));
+	public MirrorCommand(View view, double m, double c){
+		super(Messages.getString("RotateClockwiseCommand_LabelText"));
 		Assert.isNotNull(view, "view cannot be null");
-		Assert.isNotNull(origin, "Center of rotation cannot be null");
+
 		this.view = view;
-		this.origin = origin;
-		this.angle = angle;
+		this.m = m;
+		this.c = c;
 	}
 
 	@Override
@@ -52,18 +52,24 @@ public class RotateCommand extends Command {
 	
 	protected void enforceConstraint(PointList points) {
 		for(int i=0; i < points.size(); i++) {
-			Point vertex = points.getPoint(i);
+			Point point = points.getPoint(i);
 			
-			double translatedToOriginX = vertex.x - origin.x;
-		    double translatedToOriginY = vertex.y - origin.y;
-
-		    double rotatedX = translatedToOriginX * Math.cos(angle) - translatedToOriginY * Math.sin(angle);
-		    double rotatedY = translatedToOriginX * Math.sin(angle) + translatedToOriginY * Math.cos(angle);
-
-		    double reverseTranslatedX = rotatedX + origin.x;
-		    double reverseTranslatedY = rotatedY + origin.y;
+			double x = (double)point.x;
+			double y = (double)point.y;
+			double reflectedX = x;
+			double reflectedY = y;
+			if(m == Double.POSITIVE_INFINITY) {
+				double d = c - x;
+				reflectedX = 2*d + x;
+		        reflectedY = y;
+			} else {
+				double d = (x + (y - c)*m)/(1 + (m*m));
+		        
+		        reflectedX = 2*d - x;
+		        reflectedY = 2*d*m - y + 2*c;
+			}
 		    
-			points.setPoint(new PrecisionPoint(reverseTranslatedX, reverseTranslatedY), i);
+			points.setPoint(new PrecisionPoint(reflectedX, reflectedY), i);
         }
 	}
 
