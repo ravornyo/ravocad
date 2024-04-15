@@ -1,9 +1,13 @@
 package com.ravocad.diagram.palette;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.gef.palette.MarqueeToolEntry;
+import org.eclipse.gef.palette.PaletteContainer;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteEntry;
+import org.eclipse.gef.palette.PaletteGroup;
 import org.eclipse.gef.palette.PaletteRoot;
+import org.eclipse.gef.palette.SelectionToolEntry;
 
 import com.ravocad.diagram.DiagramPlugin;
 import com.ravocad.diagram.i10n.Messages;
@@ -16,14 +20,37 @@ import com.ravocad.diagram.tools.PolylineTool;
 import com.ravocad.diagram.tools.QuadTool;
 import com.ravocad.diagram.tools.RectangleTool;
 import com.ravocad.diagram.tools.SmoothPolylineTool;
+import com.ravocad.diagram.tools.TextTool;
 import com.ravocad.notation.NotationPackage;
 
 public class PaletteFactory {
 
 	public static PaletteRoot createPalette() {
 		PaletteRoot palette = new PaletteRoot();
+		palette.add(addCommonTools(palette));
 		palette.add(createDrawingTools());
 		return palette;
+	}
+	
+	private static PaletteGroup addCommonTools(final PaletteContainer parent) {
+		final PaletteGroup commonTools = new PaletteGroup("Common Tools");
+		final SelectionToolEntry selectionTool = new SelectionToolEntry();
+		commonTools.add(selectionTool);
+		if (parent instanceof PaletteRoot) {
+			((PaletteRoot) parent).setDefaultEntry(selectionTool);
+		}
+		commonTools.add(new MarqueeToolEntry());
+		
+		PaletteToolEntry textTool = new PaletteToolEntry(
+				Messages.getString("Palette_Text_Tool_Label"), 
+				Messages.getString("Palette_Text_Tool_desc"), 
+				NotationPackage.eINSTANCE.getText(),
+				TextTool.class, 
+				DiagramPlugin.getBundledImageDescriptor("icons/obj16/text.png"), 
+				DiagramPlugin.getBundledImageDescriptor("icons/obj24/text@2x.png"));
+		commonTools.add(textTool);
+		
+		return commonTools;
 	}
 
 	private static PaletteEntry createDrawingTools() {
@@ -89,8 +116,8 @@ public class PaletteFactory {
 				Messages.getString("Palette_SmoothPolyline_Tool_desc"), 
 				template,
 				SmoothPolylineTool.class, 
-				DiagramPlugin.getBundledImageDescriptor("icons/obj16/spline.png"), 
-				DiagramPlugin.getBundledImageDescriptor("icons/obj24/spline@2x.png"));
+				DiagramPlugin.getBundledImageDescriptor("icons/obj16/smoothPolyline.png"), 
+				DiagramPlugin.getBundledImageDescriptor("icons/obj24/smoothPolyline@2x.png"));
 		drawer.add(entry);
 		
 		entry = new PaletteToolEntry(
@@ -110,7 +137,6 @@ public class PaletteFactory {
 				DiagramPlugin.getBundledImageDescriptor("icons/obj16/cubic.png"), 
 				DiagramPlugin.getBundledImageDescriptor("icons/obj24/cubic@2x.png"));
 		drawer.add(entry);
-
 		
 		return drawer;
 	}

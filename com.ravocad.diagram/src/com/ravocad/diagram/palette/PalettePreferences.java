@@ -8,10 +8,10 @@ import com.ravocad.diagram.DiagramPlugin;
 
 public class PalettePreferences extends DefaultPaletteViewerPreferences implements FlyoutPreferences {
 
-	protected static final String PALETTE_DOCK_LOCATION = "DiagramEditorPaletteFactory.location"; //$NON-NLS-1$
-	protected static final String PALETTE_WIDTH = "DiagramEditorPaletteFactory.PaletteSize"; //$NON-NLS-1$
-	protected static final String PALETTE_STATE = "DiagramEditorPaletteFactory.PaletteState"; //$NON-NLS-1$
-	protected static final int DEFAULT_PALETTE_SIZE = 250;
+	protected static final String PALETTE_DOCK_LOCATION = "DiagramEditorPaletteFactory.location";
+	protected static final String PALETTE_WIDTH = "DiagramEditorPaletteFactory.PaletteSize";
+	protected static final String PALETTE_STATE = "DiagramEditorPaletteFactory.PaletteState";
+	protected static final int DEFAULT_PALETTE_SIZE = 220;
 	
 	public PalettePreferences() {
 		this(DiagramPlugin.getInstance().getPreferenceStore());
@@ -20,6 +20,10 @@ public class PalettePreferences extends DefaultPaletteViewerPreferences implemen
 	public PalettePreferences(final IPreferenceStore store) {
 		super(store);
 		store.setDefault(PALETTE_WIDTH, DEFAULT_PALETTE_SIZE);
+		store.setDefault(PREFERENCE_LAYOUT, LAYOUT_COLUMNS);
+		
+		store.setDefault(PREFERENCE_COLUMNS_ICON_SIZE, true);
+		store.setDefault(PREFERENCE_ICONS_ICON_SIZE, true);
 		store.setDefault(PREFERENCE_LAYOUT, LAYOUT_COLUMNS);
 	}
 	
