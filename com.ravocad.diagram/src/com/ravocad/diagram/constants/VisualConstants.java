@@ -14,4 +14,7 @@ public class VisualConstants {
 	public static final String RECTANGLE = "Rectangle";
 	public static final String SMOOTH_POLYLINE = "SmoothPolyline";
 	public static final String TRIANGLE = "Triangle";
+	
+	public static final String LABEL = "Label";
+	public static final String NOTE = "Note";
 }
