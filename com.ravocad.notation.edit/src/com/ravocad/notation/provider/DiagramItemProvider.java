@@ -14,6 +14,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -60,34 +61,14 @@ public class DiagramItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addRulerVisiblePropertyDescriptor(object);
 			addGridVisiblePropertyDescriptor(object);
+			addGridColorPropertyDescriptor(object);
+			addGridSpacingPropertyDescriptor(object);
+			addGridUnitPropertyDescriptor(object);
 			addSnapToGridPropertyDescriptor(object);
 			addSnapToGeometryPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Ruler Visible feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRulerVisiblePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Diagram_rulerVisible_feature"),
-				 getString("_UI_Diagram_rulerVisible_description"),
-				 NotationPackage.Literals.DIAGRAM__RULER_VISIBLE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -108,7 +89,74 @@ public class DiagramItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 getString("_UI_GridPropertyCategory"),
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Grid Color feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGridColorPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Diagram_gridColor_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Diagram_gridColor_feature", "_UI_Diagram_type"),
+				 NotationPackage.Literals.DIAGRAM__GRID_COLOR,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 getString("_UI_GridPropertyCategory"),
 				 null,
+				 URI.createURI("editor://com.ravocad.color/TOOL|MAX|RESIZE")));
+	}
+
+	/**
+	 * This adds a property descriptor for the Grid Spacing feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGridSpacingPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Diagram_gridSpacing_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Diagram_gridSpacing_feature", "_UI_Diagram_type"),
+				 NotationPackage.Literals.DIAGRAM__GRID_SPACING,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 getString("_UI_GridPropertyCategory"),
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Grid Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGridUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Diagram_gridUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Diagram_gridUnit_feature", "_UI_Diagram_type"),
+				 NotationPackage.Literals.DIAGRAM__GRID_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 getString("_UI_GridPropertyCategory"),
 				 null));
 	}
 
@@ -130,7 +178,7 @@ public class DiagramItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
+				 getString("_UI_SnapHelperPropertyCategory"),
 				 null));
 	}
 
@@ -152,7 +200,7 @@ public class DiagramItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
+				 getString("_UI_SnapHelperPropertyCategory"),
 				 null));
 	}
 
@@ -176,7 +224,7 @@ public class DiagramItemProvider
 	@Override
 	public String getText(Object object) {
 		Diagram diagram = (Diagram)object;
-		return getString("_UI_Diagram_type") + " " + diagram.isRulerVisible();
+		return getString("_UI_Diagram_type") + " " + diagram.isGridVisible();
 	}
 
 
@@ -192,8 +240,10 @@ public class DiagramItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Diagram.class)) {
-			case NotationPackage.DIAGRAM__RULER_VISIBLE:
 			case NotationPackage.DIAGRAM__GRID_VISIBLE:
+			case NotationPackage.DIAGRAM__GRID_COLOR:
+			case NotationPackage.DIAGRAM__GRID_SPACING:
+			case NotationPackage.DIAGRAM__GRID_UNIT:
 			case NotationPackage.DIAGRAM__SNAP_TO_GRID:
 			case NotationPackage.DIAGRAM__SNAP_TO_GEOMETRY:
 			case NotationPackage.DIAGRAM__ZOOM:

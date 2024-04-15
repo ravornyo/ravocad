@@ -4,7 +4,7 @@ package com.ravocad.notation.provider;
 
 
 import com.ravocad.notation.NotationPackage;
-import com.ravocad.notation.Path;
+import com.ravocad.notation.Text;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,19 +19,19 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.ravocad.notation.Path} object.
+ * This is the item provider adapter for a {@link com.ravocad.notation.Text} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PathItemProvider extends ViewItemProvider {
+public class TextItemProvider extends ViewItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PathItemProvider(AdapterFactory adapterFactory) {
+	public TextItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -46,29 +46,72 @@ public class PathItemProvider extends ViewItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLineColorPropertyDescriptor(object);
-			addLineWidthPropertyDescriptor(object);
-			addFillPropertyDescriptor(object);
-			addFillColorPropertyDescriptor(object);
-			addAlphaPropertyDescriptor(object);
+			addContentPropertyDescriptor(object);
+			addFontPropertyDescriptor(object);
+			addColorPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Line Color feature.
+	 * This adds a property descriptor for the Content feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLineColorPropertyDescriptor(Object object) {
+	protected void addContentPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Path_lineColor_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Path_lineColor_feature", "_UI_Path_type"),
-				 NotationPackage.Literals.PATH__LINE_COLOR,
+				 getString("_UI_Text_content_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Text_content_feature", "_UI_Text_type"),
+				 NotationPackage.Literals.TEXT__CONTENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Font feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFontPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Text_font_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Text_font_feature", "_UI_Text_type"),
+				 NotationPackage.Literals.TEXT__FONT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null,
+				 URI.createURI("editor://com.ravocad.font/TOOL|MAX|RESIZE")));
+	}
+
+	/**
+	 * This adds a property descriptor for the Color feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addColorPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Text_color_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Text_color_feature", "_UI_Text_type"),
+				 NotationPackage.Literals.TEXT__COLOR,
 				 true,
 				 false,
 				 false,
@@ -79,103 +122,14 @@ public class PathItemProvider extends ViewItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Fill Color feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addFillColorPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Path_fillColor_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Path_fillColor_feature", "_UI_Path_type"),
-				 NotationPackage.Literals.PATH__FILL_COLOR,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null,
-				 URI.createURI("editor://com.ravocad.color/TOOL|MAX|RESIZE")));
-	}
-
-	/**
-	 * This adds a property descriptor for the Alpha feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAlphaPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Path_alpha_feature"),
-				 getString("_UI_Path_alpha_description"),
-				 NotationPackage.Literals.PATH__ALPHA,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Line Width feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLineWidthPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Path_lineWidth_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Path_lineWidth_feature", "_UI_Path_type"),
-				 NotationPackage.Literals.PATH__LINE_WIDTH,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Fill feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addFillPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Path_fill_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Path_fill_feature", "_UI_Path_type"),
-				 NotationPackage.Literals.PATH__FILL,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns Path.gif.
+	 * This returns Text.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Path"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Text"));
 	}
 
 	/**
@@ -186,10 +140,10 @@ public class PathItemProvider extends ViewItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Path)object).getHint();
+		String label = ((Text)object).getHint();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Path_type") :
-			getString("_UI_Path_type") + " " + label;
+			getString("_UI_Text_type") :
+			getString("_UI_Text_type") + " " + label;
 	}
 
 
@@ -204,14 +158,11 @@ public class PathItemProvider extends ViewItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Path.class)) {
-			case NotationPackage.PATH__DATA:
-			case NotationPackage.PATH__HANDLES:
-			case NotationPackage.PATH__LINE_COLOR:
-			case NotationPackage.PATH__LINE_WIDTH:
-			case NotationPackage.PATH__FILL:
-			case NotationPackage.PATH__FILL_COLOR:
-			case NotationPackage.PATH__ALPHA:
+		switch (notification.getFeatureID(Text.class)) {
+			case NotationPackage.TEXT__CONTENT:
+			case NotationPackage.TEXT__LOCATION:
+			case NotationPackage.TEXT__FONT:
+			case NotationPackage.TEXT__COLOR:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

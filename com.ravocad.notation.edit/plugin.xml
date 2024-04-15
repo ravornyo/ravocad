@@ -20,10 +20,17 @@
    </extension>
    
    <extension point="org.eclipse.emf.edit.propertyEditorFactories">
-   <factory
-         class="com.ravocad.notation.provider.ColorPropertyEditorFactory"
-         uri="editor://com.ravocad.color/">
-   </factory>
-</extension>
+	   <factory
+	         class="com.ravocad.notation.provider.ColorPropertyEditorFactory"
+	         uri="editor://com.ravocad.color/">
+	   </factory>
+	</extension>
+	
+	<extension point="org.eclipse.emf.edit.propertyEditorFactories">
+	   <factory
+	         class="com.ravocad.notation.provider.FontPropertyEditorFactory"
+	         uri="editor://com.ravocad.font/">
+	   </factory>
+	</extension>
 
 </plugin>

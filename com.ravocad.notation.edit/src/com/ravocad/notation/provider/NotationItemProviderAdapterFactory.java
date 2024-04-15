@@ -118,6 +118,29 @@ public class NotationItemProviderAdapterFactory extends NotationAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.ravocad.notation.Text} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected TextItemProvider textItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.ravocad.notation.Text}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createTextAdapter() {
+		if (textItemProvider == null) {
+			textItemProvider = new TextItemProvider(this);
+		}
+
+		return textItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -224,6 +247,7 @@ public class NotationItemProviderAdapterFactory extends NotationAdapterFactory i
 	public void dispose() {
 		if (diagramItemProvider != null) diagramItemProvider.dispose();
 		if (pathItemProvider != null) pathItemProvider.dispose();
+		if (textItemProvider != null) textItemProvider.dispose();
 	}
 
 }
