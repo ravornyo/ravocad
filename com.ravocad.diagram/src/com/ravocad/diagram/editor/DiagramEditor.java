@@ -18,10 +18,17 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SafeRunner;
+import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.parts.ScrollableThumbnail;
+import org.eclipse.draw2d.parts.Thumbnail;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -30,17 +37,20 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor.PropertyValueWrapper
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
+import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
+import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
+import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
-import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.CopyTemplateAction;
 import org.eclipse.gef.ui.actions.DirectEditAction;
@@ -53,18 +63,22 @@ import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
+import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.gef.ui.properties.UndoablePropertySheetEntry;
 import org.eclipse.gef.ui.properties.UndoablePropertySheetPage;
-import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -86,6 +100,7 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.IPageSite;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -95,6 +110,10 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 import com.ravocad.diagram.DiagramDebugOptions;
 import com.ravocad.diagram.DiagramPlugin;
 import com.ravocad.diagram.Trace;
+import com.ravocad.diagram.actions.MirrorAction;
+import com.ravocad.diagram.actions.RotateAction;
+import com.ravocad.diagram.actions.ScaleAction;
+import com.ravocad.diagram.edit.parts.DiagramRootEditPart;
 import com.ravocad.diagram.edit.parts.GraphicalEditPartFactory;
 import com.ravocad.diagram.i10n.Messages;
 import com.ravocad.diagram.palette.PaletteCustomizer;
@@ -110,16 +129,77 @@ import com.ravocad.notation.provider.NotationItemProviderAdapterFactory;
 public class DiagramEditor extends GraphicalEditorWithFlyoutPalette {
 	
 	public static final String ID = "com.ravocad.diagram.editor.DiagramEditorID";
+	
+	class DiagramOutlinePage extends ContentOutlinePage implements IAdaptable {
+		private Canvas overview;
+		private Thumbnail thumbnail;
+		private DisposeListener disposeListener;
+		public DiagramOutlinePage(EditPartViewer viewer) {
+			super(viewer);
+		}		
+		public void createControl(Composite parent) {
+			overview = new Canvas(parent, SWT.NONE);
+			initializeOverview();
+		}
+		@Override
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		public Object getAdapter(Class type) {
+			if (type == ZoomManager.class) {
+				return getGraphicalViewer().getProperty(ZoomManager.class.toString());
+			}
+			return null;
+		}
+		public Control getControl() {
+			return overview;
+		}
+		protected void initializeOutlineViewer() {
+			setContents(getDiagram());
+		}
+		protected void initializeOverview() {
+			LightweightSystem lws = new LightweightSystem(overview);
+			RootEditPart rep = getGraphicalViewer().getRootEditPart();
+			if (rep instanceof ScalableFreeformRootEditPart) {
+				ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) rep;
+				thumbnail = new ScrollableThumbnail((Viewport) root.getFigure());
+				thumbnail.setBorder(new MarginBorder(3));
+				thumbnail.setSource(root.getLayer(LayerConstants.PRINTABLE_LAYERS));
+				lws.setContents(thumbnail);
+				disposeListener = new DisposeListener() {
+					public void widgetDisposed(DisposeEvent e) {
+						if (thumbnail != null) {
+							thumbnail.deactivate();
+							thumbnail = null;
+						}
+					}
+				};
+				getEditor().addDisposeListener(disposeListener);
+			}
+		}
+		public void setContents(Object contents) {
+			getViewer().setContents(contents);
+		}
+		@Override
+		public void dispose() {
+			if (disposeListener != null && getEditor() != null && !getEditor().isDisposed()) {
+				getEditor().removeDisposeListener(disposeListener);
+			}
+			if (thumbnail != null) {
+				thumbnail.deactivate();
+				thumbnail = null;
+			}
+			super.dispose();
+			DiagramEditor.this.outlinePage = null;
+		}
+	}
 
 	private KeyHandler sharedKeyHandler;
 	private PaletteRoot paletteRoot;
 	private PropertySheetPage propertyPage;
+	private DiagramOutlinePage outlinePage;
 
 	private final Resource resource = new XMLResourceImpl();
 	private Diagram diagram;
 	private ResourceTracker resourceListener = new ResourceTracker();
-	
-	private RulerComposite rulerComposite;
 
 	private boolean editorSaving = false;
 
@@ -145,7 +225,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette {
 		super.configureGraphicalViewer();
 		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
 
-		ScalableFreeformRootEditPart root = new ScalableFreeformRootEditPart();
+		DiagramRootEditPart root = new DiagramRootEditPart();
 		
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(new GraphicalEditPartFactory());
@@ -184,6 +264,10 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette {
 		getGraphicalControl().addListener(SWT.Activate, listener);
 		getGraphicalControl().addListener(SWT.Deactivate, listener);
 	}
+	
+	protected FigureCanvas getEditor() {
+		return (FigureCanvas) getGraphicalViewer().getControl();
+	}
 
 	protected void writeToOutputStream(OutputStream os) throws IOException {
 		ObjectOutputStream out = new ObjectOutputStream(os);
@@ -205,6 +289,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette {
 		return new PaletteViewerProvider(getEditDomain()) {
 			protected void configurePaletteViewer(PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
+				viewer.setPaletteViewerPreferences(getPalettePreferences());
 				viewer.setCustomizer(new PaletteCustomizer());
 				viewer.addDragSourceListener(new PaletteTransferDragSourceListener(viewer));
 			}
@@ -368,6 +453,13 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(Class type) {
+		if (type == IContentOutlinePage.class) {
+			outlinePage = new DiagramOutlinePage(new TreeViewer());
+			return outlinePage;
+		}
+		if (type == EditDomain.class) {
+			return getEditDomain();
+		}
 		if(type.equals(IPropertySheetPage.class)) {
 			if(propertyPage == null) {
                 propertyPage = (UndoablePropertySheetPage)super.getAdapter(type);
@@ -400,15 +492,13 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette {
             }
             return propertyPage;
 		}
+		if(type == EditPartViewer.class) {
+			return getGraphicalViewer();
+		}
         if (type == ZoomManager.class) {
 			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
 		}
 		return super.getAdapter(type);
-	}
-
-	@Override
-	protected Control getGraphicalControl() {
-		return rulerComposite;
 	}
 
 	/**
@@ -480,6 +570,18 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette {
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		
+		action = new RotateAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		action = new MirrorAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		action = new ScaleAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
 		action = new PrintAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
@@ -489,15 +591,7 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette {
 		getSelectionActions().add(action.getId());
 	}
 
-	@Override
-	protected void createGraphicalViewer(Composite parent) {
-		rulerComposite = new RulerComposite(parent, SWT.NONE);
-		super.createGraphicalViewer(rulerComposite);
-		rulerComposite.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
-	}
-
 	protected void loadProperties() {
-		getGraphicalViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, getDiagram().isRulerVisible());
 		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, getDiagram().isGridVisible());
 		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, getDiagram().isSnapToGrid());
 		getGraphicalViewer().setProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED, getDiagram().isSnapToGrid());
@@ -509,12 +603,9 @@ public class DiagramEditor extends GraphicalEditorWithFlyoutPalette {
 		}
 		// Scroll-wheel Zoom
 		getGraphicalViewer().setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
-
 	}
 
 	protected void saveProperties() {
-		getDiagram().setRulerVisible(
-				((Boolean) getGraphicalViewer().getProperty(RulerProvider.PROPERTY_RULER_VISIBILITY)).booleanValue());
 		getDiagram().setGridVisible(
 				((Boolean) getGraphicalViewer().getProperty(SnapToGrid.PROPERTY_GRID_VISIBLE)).booleanValue());
 		getDiagram().setSnapToGrid(

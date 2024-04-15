@@ -8,6 +8,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.actions.ActionFactory;
 
+import com.ravocad.diagram.constants.ActionConstants;
+
 /**
  * Provides context menu actions for the DiagramEditor.
  */
@@ -36,6 +38,8 @@ public class DiagramContextMenuProvider extends ContextMenuProvider {
 		// Add standard action groups to the menu
 		GEFActionConstants.addStandardActionGroups(menu);
 		
+		IAction action;
+		
 		// Add actions to the menu
 		menu.appendToGroup(
 				GEFActionConstants.GROUP_UNDO, // target group id
@@ -43,9 +47,27 @@ public class DiagramContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(
 				GEFActionConstants.GROUP_UNDO, 
 				getAction(ActionFactory.REDO.getId()));
-		menu.appendToGroup(
-				GEFActionConstants.GROUP_EDIT,
-				getAction(ActionFactory.DELETE.getId()));	
+		
+		action = getAction(ActionFactory.COPY.getId());
+		if (action.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+		}		
+		action = getAction(ActionFactory.PASTE.getId());
+		if (action.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+		}		
+		action = getAction(ActionFactory.DELETE.getId());
+		if (action.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+		}		
+		action = getAction(ActionConstants.ROTATE);
+		if (action.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+		}
+		action = getAction(ActionConstants.MIRROR);
+		if (action.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+		}
 	}
 	
 	private IAction getAction(String actionId) {

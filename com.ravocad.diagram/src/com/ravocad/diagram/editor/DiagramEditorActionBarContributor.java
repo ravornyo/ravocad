@@ -16,6 +16,11 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
+
+import com.ravocad.diagram.actions.MirrorRetargetAction;
+import com.ravocad.diagram.actions.RotateRetargetAction;
+import com.ravocad.diagram.actions.ScaleRetargetAction;
+import com.ravocad.diagram.constants.ActionConstants;
 import com.ravocad.diagram.i10n.Messages;
 
 public class DiagramEditorActionBarContributor extends ActionBarContributor {
@@ -24,6 +29,10 @@ public class DiagramEditorActionBarContributor extends ActionBarContributor {
 	protected void buildActions() {
 		addRetargetAction(new UndoRetargetAction());
 		addRetargetAction(new RedoRetargetAction());
+		
+		addRetargetAction(new RotateRetargetAction());
+		addRetargetAction(new MirrorRetargetAction());		
+		addRetargetAction(new ScaleRetargetAction());
 
 		addRetargetAction(new ZoomInRetargetAction());
 		addRetargetAction(new ZoomOutRetargetAction());
@@ -51,6 +60,11 @@ public class DiagramEditorActionBarContributor extends ActionBarContributor {
 		tbm.add(getAction(ActionFactory.UNDO.getId()));
 		tbm.add(getAction(ActionFactory.REDO.getId()));
 
+		tbm.add(new Separator());
+		
+		tbm.add(getAction(ActionConstants.MIRROR));
+		tbm.add(getAction(ActionConstants.ROTATE));
+		tbm.add(getAction(ActionConstants.SCALE));
 		tbm.add(new Separator());
 
 		String[] zoomStrings = new String[] { 
